@@ -33,7 +33,7 @@ def test():
     scenario = sp.test_scenario("NFT", [fa2.t, fa2.main, m])
     
     owner = sp.address("tz1Pierff89sbvsAveJgghkLHxHSLq74xRPA")
-    ledger = {0: alice.address, 1: alice.address, 2: alice.address}
+    ledger = {}
     
     # Contract metadata
 
@@ -43,11 +43,9 @@ def test():
     })
 
     # Token metadata
-    token_metadata = sp.list([
-        sp.map({
+    token_metadata = sp.map({
             "" : sp.scenario_utils.bytes_of_string("ipfs://bafkreierffftgdmhrwqca6hkjxm7m5kmtbaoglkz32tt2tlepu7zxic72q")
         })
-    ])
 
 
     scenario.h1("Initialize contract")
@@ -56,12 +54,13 @@ def test():
     c1 = m.FoundersPass(
         administrator=owner,
         metadata=contract_metadata,
-        ledger={0: owner},
-        token_metadata=token_metadata
+        ledger=ledger,
+        token_metadata=sp.list([
+            sp.map({})
+        ])
     )
 
     scenario.h2("Contract")
     scenario += c1
-    
-    # Example minting action
-    #c1.mintNft(sp.record(address=owner, metadata=token_metadata)).run(sender=owner)
+
+    #c1.mint(sp.list[sp.record(to_=owner,metadata=token_metadata)]).run()
