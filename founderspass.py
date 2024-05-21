@@ -3,9 +3,6 @@ import smartpy as sp
 # Importing the FA2 library from SmartPy
 from smartpy.templates import fa2_lib as fa2
 
-administrator = sp.test_account("Administrator")
-alice = sp.test_account("Alice")
-
 # Define the main module
 main = fa2.main
 
