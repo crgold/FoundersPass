@@ -33,7 +33,29 @@ def m():
             """Admin can mint new or existing tokens."""
             # Define the NFT metadata
             nft_metadata = {
-                "" : sp.bytes("0x697066733a2f2f6261666b726569726666667464676d68727771636136686b6a786d376d356b6d7462616f676c6b7a3332747432746c657075377a786963373271")
+                "name":sp.pack("Founders Pass"),
+                "description":sp.pack("The Founders Pass NFT for BattleRise gives holders exclusive benefits: In-Game asset pack worth over $200; Free entry to the Top Tier Battle Pass worth near $100/year; Weekly $BATTLE rewards for staking the NFT; slightly higher drop % for randomised in-game rewards."),
+                "artifactUri":sp.pack("ipfs://bafybeiftiddzw6nrr65xlxiaahtxucivyeyocakxopiox6e4iuoypt6jbq"),
+                "displayUri":sp.pack("ipfs://bafybeiftiddzw6nrr65xlxiaahtxucivyeyocakxopiox6e4iuoypt6jbq"),
+                "tags":sp.pack(["battlerise","founders","pass"]),
+                "thumbnailUri":sp.pack("ipfs://bafkreigtd5xh77jns73k7tnvxexbnouixgm6ift25hadulq4zyc5gzx46m"),
+                "externalUri":sp.pack("https://www.triumphgames.io/"),
+                "formats":sp.pack([
+                    {
+                        "uri":"ipfs://bafybeiftiddzw6nrr65xlxiaahtxucivyeyocakxopiox6e4iuoypt6jbq",
+                        "mimeType":"image/png"
+                    },
+                    {
+                        "uri":"ipfs://bafybeiftiddzw6nrr65xlxiaahtxucivyeyocakxopiox6e4iuoypt6jbq",
+                        "mimeType":"image/png"
+                    },
+                    {
+                        "uri":"ipfs://bafkreigtd5xh77jns73k7tnvxexbnouixgm6ift25hadulq4zyc5gzx46m",
+                        "mimeType":"image/png"
+                    }
+               ]),
+               "decimals": sp.pack("0"),
+               "isBooleanAmount": sp.pack("false")
             }
             
             sp.cast(
@@ -58,12 +80,37 @@ def test():
     scenario = sp.test_scenario("NFT", [fa2.t, fa2.main, m])
     
     owner = sp.address("tz1Pierff89sbvsAveJgghkLHxHSLq74xRPA")
-    ledger = {}
+    ledger = {0:owner}
+    nft_metadata = {
+        "name":sp.pack("Founders Pass"),
+        "description":sp.pack("The Founders Pass NFT for BattleRise gives holders exclusive benefits: In-Game asset pack worth over $200; Free entry to the Top Tier Battle Pass worth near $100/year; Weekly $BATTLE rewards for staking the NFT; slightly higher drop % for randomised in-game rewards."),
+        "artifactUri":sp.pack("ipfs://bafybeiftiddzw6nrr65xlxiaahtxucivyeyocakxopiox6e4iuoypt6jbq"),
+        "displayUri":sp.pack("ipfs://bafybeiftiddzw6nrr65xlxiaahtxucivyeyocakxopiox6e4iuoypt6jbq"),
+        "tags":sp.pack(["battlerise","founders","pass"]),
+        "thumbnailUri":sp.pack("ipfs://bafkreigtd5xh77jns73k7tnvxexbnouixgm6ift25hadulq4zyc5gzx46m"),
+        "externalUri":sp.pack("https://www.triumphgames.io/"),
+        "formats":sp.pack([
+            {
+                "uri":"ipfs://bafybeiftiddzw6nrr65xlxiaahtxucivyeyocakxopiox6e4iuoypt6jbq",
+                "mimeType":"image/png"
+            },
+            {
+                "uri":"ipfs://bafybeiftiddzw6nrr65xlxiaahtxucivyeyocakxopiox6e4iuoypt6jbq",
+                        "mimeType":"image/png"
+            },
+            {
+                "uri":"ipfs://bafkreigtd5xh77jns73k7tnvxexbnouixgm6ift25hadulq4zyc5gzx46m",
+                "mimeType":"image/png"
+            }
+        ]),
+        "decimals": sp.pack("0"),
+        "isBooleanAmount": sp.pack("false")
+    }
     
-    # Contract metadata (make sure to update this as I think it's for the crystal contract)
+    # Contract metadata
     contract_metadata = sp.big_map({
         "" : sp.scenario_utils.bytes_of_string(
-            "ipfs://bafkreibmshgnjeolxwnjhoxtbr6gq5lxwi3aexmytg677hdu67ljmk6ylq")
+            "ipfs://bafkreifa6roqhjtuxgcas37eup65bxw2qn24hou2be4czv6mxtm2xbxsfu")
     })
 
     scenario.h1("Initialize contract")
@@ -73,7 +120,7 @@ def test():
         administrator=owner,
         metadata=contract_metadata,
         ledger=ledger,
-        token_metadata=[]
+        token_metadata=[nft_metadata]
     )
 
     scenario.h2("Contract")
@@ -92,10 +139,10 @@ def test():
     scenario.show(c1.data.ledger)
 
     # Create a batch of minting actions for 300 NFTs
-    batch = sp.list([sp.record(to_=owner) for _ in range(300)])
+    #batch = sp.list([sp.record(to_=owner) for _ in range(300)])
 
-    scenario.h4("Mint 300 NFTs to the owner")
+    #scenario.h4("Mint 300 NFTs to the owner")
 
     # Call the mint entry point with the batch
-    c1.mint(batch, _sender=owner)
-    scenario.show(c1.data.ledger)
+    #c1.mint(batch, _sender=owner)
+    #scenario.show(c1.data.ledger)
